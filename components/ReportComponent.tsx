@@ -3,7 +3,6 @@ import { Input } from './ui/input'
 import { Button } from './ui/button'
 import { Textarea } from './ui/textarea'
 import { Label } from './ui/label'
-import SocialMediaLinks from './social-links'
 // import { toast } from 'sonner'
 import { useToast } from "@/components/ui/use-toast"
 
@@ -167,21 +166,17 @@ const ReportComponent = ({ onReportConfirmation }: Props) => {
                     onChange={(e) => {
                         setReportData(e.target.value);
                     }}
-                    placeholder="Extracted data from the report will appear here. Get better recommendations by providing additional patient history and symptoms..."
+                    placeholder="Extracted data from the report will be shown here"
                     className="min-h-72 resize-none border-0 p-3 shadow-none focus-visible:ring-0" />
                 <Button
                     variant="destructive"
-                    className="bg-[#D90013]"
+                    className="bg-[#007FFF]"
                     onClick={() => {
                         onReportConfirmation(reportData);
                     }}
                 >
                     2. Looks Good
                 </Button>
-                <div className='flex flex-row items-center justify-center gap-2 p-4'>
-                    <Label>Share your thoughts </Label>
-                    <SocialMediaLinks />
-                </div>
             </fieldset>
         </div>
     )

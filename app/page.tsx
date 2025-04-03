@@ -37,8 +37,8 @@ const Home = () => {
     <div className="grid h-screen w-full">
       <div className="flex flex-col">
         <header className="sticky top-0 z-10 flex h-[57px] bg-background items-center gap-1 border-b px-4">
-          <h1 className="text-xl font-semibold text-[#D90013]">
-            <span className="flex flex-row">Mr.AlmostMD</span>
+          <h1 className="text-xl font-semibold text-[#4169E1]">
+            <span className="flex flex-row">NeoPharmix </span>
           </h1>
           <div className="w-full flex flex-row justify-end gap-2">
             <ModeToggle />

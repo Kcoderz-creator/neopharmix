@@ -33,28 +33,45 @@ export async function POST(req: Request, res: Response) {
     const userQuestion = `${messages[messages.length - 1].content}`;
 
     const reportData: string = reqBody.data.reportData;
-    const query = `Represent this for searching relevant passages: patient medical report says: \n${reportData}. \n\n${userQuestion}`;
+    const query = `  Molecular Research Context:
+    - Disease: ${reportData}
+    - Research Focus: ${reportData}
+    
+    Find relevant molecular interactions, potential drug candidates, and research insights.
+    `;
 
-    const retrievals = await queryPineconeVectorStore(pinecone, 'medic', "ns1", query);
+    const retrievals = await queryPineconeVectorStore(pinecone, 'drug-discovery', "Default", query);
 
-    const finalPrompt = `Here is a summary of a patient's clinical report, and a user query. Some generic clinical findings are also provided that may or may not be relevant for the report.
-  Go through the clinical report and answer the user query.
-  Ensure the response is factually accurate, and demonstrates a thorough understanding of the query topic and the clinical report.
-  Before answering you may enrich your knowledge by going through the provided clinical findings. 
-  The clinical findings are generic insights and not part of the patient's medical report. Do not include any clinical finding if it is not relevant for the patient's case.
+    const finalPrompt = `Drug Discovery Research Analysis
 
-  \n\n**Patient's Clinical report summary:** \n${reportData}. 
-  \n**end of patient's clinical report** 
+**Disease Context:** ${reportData}
 
-  \n\n**User Query:**\n${userQuestion}?
-  \n**end of user query** 
+**Research Objective:** ${userQuestion}
 
-  \n\n**Generic Clinical findings:**
-  \n\n${retrievals}. 
-  \n\n**end of generic clinical findings** 
+**Molecular Research Database Insights:**
+${retrievals}
 
-  \n\nProvide thorough justification for your answer.
-  \n\n**Answer:**
+Research Guidance:
+1. Provide a comprehensive analysis of potential drug candidates
+2. Evaluate molecular interaction mechanisms
+3. Assess therapeutic potential
+4. Suggest structural modification strategies
+5. Consider pharmacological challenges and opportunities
+
+Analytical Framework:
+- Leverage ChemBL database insights
+- Apply Lipinski's Rule of Five
+- Consider target protein interactions
+- Evaluate binding affinity potential
+- Analyze structural modifications
+
+Deliver a structured, scientifically rigorous response that:
+- Explains molecular interaction hypotheses
+- Identifies promising drug candidate characteristics
+- Provides evidence-based recommendations
+- Highlights potential research directions
+
+**Detailed Research Analysis:**
   `;
 
     const data = new StreamData();

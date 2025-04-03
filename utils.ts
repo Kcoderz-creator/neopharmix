@@ -1,7 +1,5 @@
-import { Pinecone } from "@pinecone-database/pinecone";
-import { FeatureExtractionPipeline, pipeline } from "@xenova/transformers";
-import { modelname, namespace, topK } from "./app/config";
-import { HfInference } from '@huggingface/inference'
+import {Pinecone} from "@pinecone-database/pinecone";
+import {HfInference} from '@huggingface/inference'
 
 const hf = new HfInference(process.env.HF_TOKEN)
 export async function queryPineconeVectorStore(
@@ -28,15 +26,28 @@ export async function queryPineconeVectorStore(
   });
 
   console.log(queryResponse);
-  
+
 
   if (queryResponse.matches.length > 0) {
-    const concatenatedRetrievals = queryResponse.matches
-      .map((match,index) =>`\nClinical Finding ${index+1}: \n ${match.metadata?.chunk}`)
-      .join(". \n\n");
-    return concatenatedRetrievals;
+    return queryResponse.matches.map((match, index) => {
+      const metadata = match.metadata || {};
+      return `
+Molecular Research Passage ${index + 1}:
+- Relevance Score: ${match.score?.toFixed(4) || 'N/A'}
+- Source: ${metadata.source || 'Unknown'}
+- Domain: ${metadata.domain || 'General'}
+
+Passage Content:
+${metadata.chunk || 'No detailed content'}
+
+Key Insights:
+- Molecular Target: ${metadata.molecularTarget || 'Not specified'}
+- Research Focus: ${metadata.researchFocus || 'General'}
+`;
+    }).join("\n\n---\n\n");
   } else {
-    return "<nomatches>";
+    return "No relevant molecular research passages found.";
   }
-  return "";
 }
+
+
